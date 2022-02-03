@@ -7,8 +7,6 @@ services:
       context: .
       dockerfile: docker/redis/Dockerfile
     command: redis-server
-    networks:
-      - nginx-proxy
     volumes:
       - "redis:/data"
     ports:
@@ -27,8 +25,6 @@ services:
       && gunicorn -c 'python:config.gunicorn' --reload 'src.app:create_app()'"
     ports:
       - '5001:8000'
-    networks:
-      - nginx-proxy
     volumes:
       - "./app:/usr/src/app:rw"
 
@@ -41,15 +37,8 @@ services:
       celery -A src.tasks worker -B -l info --concurrency=40"
     depends_on:
       - "redis"
-    networks:
-      - nginx-proxy
     volumes:
       - "./app:/usr/src/app"
 
 volumes:
   redis: {}
-
-networks:
-  nginx-proxy:
-    external:
-      name: nginx-proxy
