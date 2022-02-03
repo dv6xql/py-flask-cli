@@ -1,0 +1,55 @@
+version: '3.3'
+
+services:
+  redis:
+    container_name: "cli-redis"
+    build:
+      context: py-flask-cli
+      dockerfile: docker/redis/Dockerfile
+    command: redis-server
+    networks:
+      - nginx-proxy
+    volumes:
+      - "redis:/data"
+    ports:
+      - '6380:6379'
+
+  app:
+    container_name: "cli-app"
+    build:
+      context: py-flask-cli
+      dockerfile: docker/app/Dockerfile
+    depends_on:
+      - "redis"
+    restart: on-failure
+    command: bash -c "
+      pip install -e .
+      && gunicorn -c 'python:config.gunicorn' --reload 'src.app:create_app()'"
+    ports:
+      - '5001:8000'
+    networks:
+      - nginx-proxy
+    volumes:
+      - "./app:/usr/src/app:rw"
+
+  celery_beat:
+    container_name: "cli-celerybeat"
+    build:
+      context: py-flask-cli
+      dockerfile: docker/app/Dockerfile
+    command: bash -c "
+      celery -A src.tasks worker -B -l info --concurrency=40"
+    depends_on:
+      - "redis"
+    networks:
+      - nginx-proxy
+    volumes:
+      - "./app:/usr/src/app"
+
+volumes:
+  redis: {}
+
+networks:
+  nginx-proxy:
+    external:
+      name: nginx-proxy
