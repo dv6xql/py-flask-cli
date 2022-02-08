@@ -1,8 +1,5 @@
 import json
 
-from src.helpers.app_environment import (
-    get_app_env
-)
 from config.redis import (
     REDIS_HOSTNAME,
     REDIS_KEY_EXPIRES_AFTER_HOUR

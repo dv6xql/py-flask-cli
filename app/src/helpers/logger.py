@@ -9,7 +9,7 @@ from config.settings import (
 try:
     from src.app import create_app
     current_app = create_app()
-except (ImportError, Exception) as e:
+except (ImportError, Exception):
     current_app = None
 
 
