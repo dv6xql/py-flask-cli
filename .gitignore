@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+settings.json
 
 # C extensions
 *.so
@@ -127,3 +128,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Idea project
+py-flask-cli/.idea/
+
+.idea
+app/.env
+app/cli.egg-info
+app/logs
