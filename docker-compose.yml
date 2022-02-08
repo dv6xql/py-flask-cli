@@ -10,7 +10,7 @@ services:
     volumes:
       - "redis:/data"
     ports:
-      - '6380:6379'
+      - "${REDIS_PORT}:6379"
 
   app:
     container_name: "cli-app"
@@ -24,7 +24,7 @@ services:
       pip install -e .
       && gunicorn -c 'python:config.gunicorn' --reload 'src.app:create_app()'"
     ports:
-      - '5001:8000'
+      - "${APP_PORT}:8000"
     volumes:
       - "./app:/usr/src/app:rw"
 
