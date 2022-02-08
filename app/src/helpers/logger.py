@@ -20,17 +20,6 @@ def get_logger():
     return current_app.logger
 
 
-def get_extra_fields(
-        operator_logins_id: str = None,
-        gl_date_collected: str = None,
-        gl_run_id: int = None) -> dict:
-    return {
-        "operator_logins_id": operator_logins_id,
-        "gl_date_collected": gl_date_collected,
-        "gl_run_id": gl_run_id
-    }
-
-
 def get_logs(from_date: str = None,
              to_date: str = None,
              log_level: str = None) -> list:
